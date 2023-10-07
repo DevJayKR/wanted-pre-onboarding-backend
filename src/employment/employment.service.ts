@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateEmploymentDto } from './dto/create-employment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Employment } from './entities/employment.entity';
-import { FindOptionsWhere, Not, Repository } from 'typeorm';
+import { FindOptionsWhere, Like, MoreThan, Not, Repository } from 'typeorm';
 import { CompanyService } from 'src/company/company.service';
 import { UpdateEmploymentDto } from './dto/update-employment.dto';
+import { SearchEmploymentDto } from './dto/search-employment.dto';
 
 @Injectable()
 export class EmploymentService {
@@ -19,10 +24,7 @@ export class EmploymentService {
 
     const newEmployment = this.employmentRepository.create({
       company,
-      position: dto.position,
-      requiredSkill: dto.required_skill,
-      reward: dto.reward,
-      summary: dto.summary,
+      ...dto.objectification(),
     });
 
     await this.employmentRepository.save(newEmployment);
@@ -92,5 +94,45 @@ export class EmploymentService {
     });
 
     return await this.findOne({ id });
+  }
+
+  async search(dto: SearchEmploymentDto) {
+    const query = dto.objectification();
+
+    const employments = await this.employmentRepository.find({
+      select: {
+        id: true,
+        position: true,
+        reward: true,
+        summary: true,
+        requiredSkill: true,
+        company: {
+          name: true,
+          nation: true,
+          location: true,
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: {
+        position: query.position ? Like(`%${query.position}%`) : undefined,
+        reward: query.reward ? MoreThan(query.reward) : undefined,
+        requiredSkill: query.requiredSkill
+          ? Like(`%${query.requiredSkill}%`)
+          : undefined,
+        id: query.id ? query.id : undefined,
+        summary: query.summary ? Like(`%${query.summary}%`) : undefined,
+      },
+      relations: {
+        company: true,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    if (employments.length > 0) return employments;
+
+    throw new NotFoundException('해당 조건의 채용 공고가 존재하지 않습니다.');
   }
 }

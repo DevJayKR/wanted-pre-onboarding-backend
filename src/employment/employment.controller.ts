@@ -6,10 +6,12 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { EmploymentService } from './employment.service';
 import { CreateEmploymentDto } from './dto/create-employment.dto';
 import { UpdateEmploymentDto } from './dto/update-employment.dto';
+import { SearchEmploymentDto } from './dto/search-employment.dto';
 
 @Controller('employment')
 export class EmploymentController {
@@ -23,6 +25,11 @@ export class EmploymentController {
   @Get()
   findAll() {
     return this.employmentService.findAll();
+  }
+
+  @Get('search')
+  seach(@Query() dto: SearchEmploymentDto) {
+    return this.employmentService.search(dto);
   }
 
   @Get(':id')
