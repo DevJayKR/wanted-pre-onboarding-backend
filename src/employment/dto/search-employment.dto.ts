@@ -13,7 +13,6 @@ export class SearchEmploymentDto {
 
   @IsString()
   @IsOptional()
-  @IsNotBlank()
   @IsNotBlank('', IsNotBlankValidateOptions)
   position?: string;
 
