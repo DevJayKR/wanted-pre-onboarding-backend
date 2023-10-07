@@ -20,4 +20,14 @@ export class CreateEmploymentDto {
   @IsString()
   @IsNotEmpty()
   required_skill: string;
+
+  objectification() {
+    return {
+      company_id: this.company_id,
+      position: this.position,
+      reward: this.reward,
+      summary: this.summary,
+      requiredSkill: this.required_skill,
+    };
+  }
 }
