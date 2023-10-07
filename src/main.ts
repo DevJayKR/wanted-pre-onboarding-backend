@@ -9,7 +9,7 @@ async function bootstrap() {
   const port = configService.getOrThrow('SERVER_PORT');
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   await app.listen(port);
 }
