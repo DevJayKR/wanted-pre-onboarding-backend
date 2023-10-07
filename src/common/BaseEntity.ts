@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import {
   CreateDateColumn,
   DeleteDateColumn,
@@ -11,9 +11,11 @@ export abstract class BaseEntity {
   id: string;
 
   @CreateDateColumn({ name: 'created_at' })
+  @Expose({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
+  @Expose({ name: 'updated_at' })
   updatedAt: Date;
 
   @Exclude()
