@@ -10,7 +10,9 @@ export function IsNotBlank(
       target: object.constructor,
       propertyName,
       constraints: [property],
-      options: validationOptions,
+      options: validationOptions || {
+        message: '$property must not be an empty string.',
+      },
       validator: {
         validate(value: any) {
           return typeof value === 'string' && value.trim().length > 0;

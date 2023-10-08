@@ -1,34 +1,30 @@
 import { IsAlphanumeric, IsOptional, IsString } from 'class-validator';
 import { IsNotBlank } from 'src/common/IsNotBlank.decorator';
 
-const IsNotBlankValidateOptions = {
-  message: '$property must not be an empty string.',
-};
-
 export class SearchEmploymentDto {
   @IsString()
   @IsOptional()
-  @IsNotBlank('', IsNotBlankValidateOptions)
+  @IsNotBlank()
   id: string;
 
   @IsString()
   @IsOptional()
-  @IsNotBlank('', IsNotBlankValidateOptions)
+  @IsNotBlank()
   position?: string;
 
   @IsAlphanumeric()
   @IsOptional()
-  @IsNotBlank('', IsNotBlankValidateOptions)
+  @IsNotBlank()
   reward?: number;
 
   @IsString()
   @IsOptional()
-  @IsNotBlank('', IsNotBlankValidateOptions)
+  @IsNotBlank()
   summary?: string;
 
   @IsString()
   @IsOptional()
-  @IsNotBlank('', IsNotBlankValidateOptions)
+  @IsNotBlank()
   required_skill?: string;
 
   objectification() {
