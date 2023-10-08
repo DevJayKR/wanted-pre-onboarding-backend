@@ -1,5 +1,12 @@
 import { BaseEntity } from 'src/common/BaseEntity';
-import { Entity } from 'typeorm';
+import { Employment } from 'src/employment/entities/employment.entity';
+import { Column, Entity, ManyToMany } from 'typeorm';
 
-@Entity()
-export class User extends BaseEntity {}
+@Entity({ name: 'users' })
+export class User extends BaseEntity {
+  @Column()
+  name: string;
+
+  @ManyToMany(() => Employment, (employment) => employment.applicants)
+  applications: Employment[];
+}

@@ -6,13 +6,14 @@
 
 서버 실행시
 
-1. `npm run docker:up` 명령어로 PostgreSQL을 실행합니다.
-2. `npm run start:dev` 명령어로 서버를 실행합니다.
+1. 프로젝트 루트 경로의 example.env 파일을 참조하여 .env 파일을 생성합니다.
+2. `npm run docker:up` 명령어로 PostgreSQL을 실행합니다.
+3. `npm run start:dev` 명령어로 서버를 실행합니다.
 
 서버 종료시
 
 1. 서버를 종료합니다.
-1. `npm run docker:down` 명령어로 PostgreSQL을 종료합니다.
+2. `npm run docker:down` 명령어로 PostgreSQL을 종료합니다.
 
 ### 사용 기술
 
@@ -41,7 +42,7 @@
 
   - [x] 해당 회사가 올린 다른 채용 공고 확인 (가산점)
 
-- [ ] 사용자는 채용공고에 지원할 수 있어야 합니다. (가산점)
+- [x] 사용자는 채용공고에 지원할 수 있어야 합니다. (가산점)
 
 ## 커밋 컨벤션
 

@@ -13,6 +13,7 @@ import { EmploymentService } from './employment.service';
 import { CreateEmploymentDto } from './dto/create-employment.dto';
 import { UpdateEmploymentDto } from './dto/update-employment.dto';
 import { SearchEmploymentDto } from './dto/search-employment.dto';
+import { ApplicationEmploymentDto } from './dto/application-employment.dto';
 
 @Controller('employment')
 export class EmploymentController {
@@ -21,6 +22,11 @@ export class EmploymentController {
   @Post()
   create(@Body() dto: CreateEmploymentDto) {
     return this.employmentService.create(dto);
+  }
+
+  @Post('application')
+  application(@Body() dto: ApplicationEmploymentDto) {
+    return this.employmentService.application(dto);
   }
 
   @Get()
@@ -36,6 +42,11 @@ export class EmploymentController {
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.employmentService.findOne({ id });
+  }
+
+  @Get('applicants/:id')
+  findApplicants(@Param('id', ParseUUIDPipe) id: string) {
+    return this.employmentService.findApplicants(id);
   }
 
   @Delete(':id')

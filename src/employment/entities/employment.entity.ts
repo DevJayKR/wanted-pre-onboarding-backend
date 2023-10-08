@@ -1,9 +1,17 @@
 import { Expose } from 'class-transformer';
 import { BaseEntity } from 'src/common/BaseEntity';
 import { Company } from 'src/company/entities/company.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 
-@Entity()
+@Entity({ name: 'employments' })
 export class Employment extends BaseEntity {
   @Column()
   position: string;
@@ -24,4 +32,10 @@ export class Employment extends BaseEntity {
   })
   @JoinColumn({ name: 'company_id' })
   company: Company;
+
+  @ManyToMany(() => User, (user) => user.applications, {
+    cascade: true,
+  })
+  @JoinTable({ name: 'employment_applicants_user' })
+  applicants: User[];
 }

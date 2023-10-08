@@ -6,10 +6,12 @@ import {
 import { CreateEmploymentDto } from './dto/create-employment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Employment } from './entities/employment.entity';
-import { FindOptionsWhere, Like, MoreThan, Not, Repository } from 'typeorm';
+import { FindOptionsWhere, Like, MoreThan, Repository } from 'typeorm';
 import { CompanyService } from 'src/company/company.service';
 import { UpdateEmploymentDto } from './dto/update-employment.dto';
 import { SearchEmploymentDto } from './dto/search-employment.dto';
+import { UserService } from 'src/user/user.service';
+import { ApplicationEmploymentDto } from './dto/application-employment.dto';
 
 @Injectable()
 export class EmploymentService {
@@ -17,6 +19,7 @@ export class EmploymentService {
     @InjectRepository(Employment)
     private employmentRepository: Repository<Employment>,
     private readonly companyService: CompanyService,
+    private readonly userService: UserService,
   ) {}
 
   async create(dto: CreateEmploymentDto) {
@@ -66,15 +69,24 @@ export class EmploymentService {
           },
         },
       },
-      where: options.id
-        ? { id: options.id, company: { employments: { id: Not(options.id) } } }
-        : options,
+      where: {
+        id: options.id,
+        company: { employments: true },
+      },
       relations: {
         company: { employments: true },
       },
     });
 
-    if (employment) return employment;
+    if (employment) {
+      const selfIndex = employment.company.employments.findIndex(
+        (employment) => employment.id == options.id,
+      );
+
+      employment.company.employments.splice(selfIndex, selfIndex + 1);
+
+      return employment;
+    }
 
     throw new BadRequestException('잘못된 채용 공고 ID 입니다.');
   }
@@ -134,5 +146,46 @@ export class EmploymentService {
     if (employments.length > 0) return employments;
 
     throw new NotFoundException('해당 조건의 채용 공고가 존재하지 않습니다.');
+  }
+
+  async application(dto: ApplicationEmploymentDto) {
+    const { employmentId, userId } = dto.objectification();
+
+    const employment = await this.employmentRepository.findOne({
+      where: { id: employmentId },
+      relations: {
+        applicants: true,
+      },
+    });
+
+    if (employment) {
+      const user = await this.userService.findOne({ id: userId });
+
+      for (const applicant of employment.applicants) {
+        if (applicant.id == user.id) {
+          throw new BadRequestException('이미 지원한 채용 공고입니다.');
+        } else {
+          employment.applicants.push(user);
+
+          await this.employmentRepository.save(employment);
+
+          employment.applicants = [];
+          employment.applicants.push(user);
+
+          return employment;
+        }
+      }
+    }
+
+    throw new BadRequestException('잘못된 채용 공고 ID 입니다.');
+  }
+
+  async findApplicants(id: string) {
+    return await this.employmentRepository.findOne({
+      where: { id },
+      relations: {
+        applicants: true,
+      },
+    });
   }
 }

@@ -1,5 +1,4 @@
 import { IsAlphanumeric, IsNotEmpty, IsString, IsUUID } from 'class-validator';
-
 export class CreateEmploymentDto {
   @IsString()
   @IsNotEmpty()
