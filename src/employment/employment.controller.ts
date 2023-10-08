@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { EmploymentService } from './employment.service';
 import { CreateEmploymentDto } from './dto/create-employment.dto';
@@ -33,17 +34,20 @@ export class EmploymentController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.employmentService.findOne({ id });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.employmentService.remove({ id });
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateEmploymentDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateEmploymentDto,
+  ) {
     return this.employmentService.update(id, dto);
   }
 }

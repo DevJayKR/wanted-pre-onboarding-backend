@@ -1,10 +1,11 @@
-import { IsAlphanumeric, IsOptional, IsString } from 'class-validator';
+import { IsAlphanumeric, IsOptional, IsString, IsUUID } from 'class-validator';
 import { IsNotBlank } from 'src/common/IsNotBlank.decorator';
 
 export class SearchEmploymentDto {
   @IsString()
   @IsOptional()
   @IsNotBlank()
+  @IsUUID()
   id: string;
 
   @IsString()

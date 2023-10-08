@@ -1,8 +1,9 @@
-import { IsAlphanumeric, IsNotEmpty, IsString } from 'class-validator';
+import { IsAlphanumeric, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateEmploymentDto {
   @IsString()
   @IsNotEmpty()
+  @IsUUID()
   company_id: string;
 
   @IsString()
