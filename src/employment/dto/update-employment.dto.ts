@@ -1,4 +1,4 @@
-import { OmitType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/swagger';
 import { CreateEmploymentDto } from './create-employment.dto';
 
 export class UpdateEmploymentDto extends OmitType(CreateEmploymentDto, [
