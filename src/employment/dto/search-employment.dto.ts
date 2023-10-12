@@ -6,7 +6,7 @@ export class SearchEmploymentDto {
   @IsOptional()
   @IsNotBlank()
   @IsUUID()
-  id: string;
+  id?: string;
 
   @IsString()
   @IsOptional()

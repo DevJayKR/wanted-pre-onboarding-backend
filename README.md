@@ -15,6 +15,14 @@
 1. 서버를 종료합니다.
 2. `npm run docker:down` 명령어로 PostgreSQL을 종료합니다.
 
+### 그 외
+
+- `npm run start:docs`
+
+  위 명령어로 Compodoc 문서를 생성하고 로컬 호스트의 8080포트에 실행합니다.
+
+  Compodoc 문서는 어플리케이션의 개요를 쉽게 알 수 있게 해주는 도구입니다.
+
 ### 사용 기술
 
 - Nest.js

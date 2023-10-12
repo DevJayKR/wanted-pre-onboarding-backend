@@ -42,7 +42,10 @@ export class CompanyService {
 
   async remove(id: string) {
     const company = await this.findOne({ id });
-    if (company) return await this.companyRepository.remove(company);
+    if (company) {
+      await this.companyRepository.remove(company);
+      return company;
+    }
 
     throw new BadRequestException('잘못된 회사 식별자 입니다.');
   }
