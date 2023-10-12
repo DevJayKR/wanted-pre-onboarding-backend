@@ -160,19 +160,26 @@ export class EmploymentService {
 
     if (employment) {
       const user = await this.userService.findOne({ id: userId });
+      const applicants = employment.applicants;
 
-      for (const applicant of employment.applicants) {
-        if (applicant.id == user.id) {
-          throw new BadRequestException('이미 지원한 채용 공고입니다.');
-        } else {
-          employment.applicants.push(user);
+      if (applicants.length == 0) {
+        applicants.push(user);
+        await this.employmentRepository.save(employment);
+        return employment;
+      } else {
+        for (const applicant of applicants) {
+          if (applicant.id == user.id) {
+            throw new BadRequestException('이미 지원한 채용 공고입니다.');
+          } else {
+            employment.applicants.push(user);
 
-          await this.employmentRepository.save(employment);
+            await this.employmentRepository.save(employment);
 
-          employment.applicants = [];
-          employment.applicants.push(user);
+            employment.applicants = [];
+            employment.applicants.push(user);
 
-          return employment;
+            return employment;
+          }
         }
       }
     }
